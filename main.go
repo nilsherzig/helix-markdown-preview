@@ -39,7 +39,9 @@ func main() {
 
 	//router.LoadHTMLFiles("templates/template1.html", "templates/template2.html")
 	router.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.html", gin.H{})
+		c.HTML(http.StatusOK, "index.html", gin.H{
+			"folder": folderPath,
+		})
 	})
 
 	message := "noch keine änderungen"
