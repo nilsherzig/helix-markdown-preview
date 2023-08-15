@@ -4,6 +4,11 @@
 
 ```bash
 go run . ~/the/folder/you/want/to/monitor
+
+# or build it 
+
+go build . 
+./helix-markdown-preview ~/the/folder/you/want/to/monitor
 ```
 
 ## Working: 
