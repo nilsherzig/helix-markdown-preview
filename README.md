@@ -1,18 +1,21 @@
-WIP! Check commit logs 
+```bash
+go run . ~/the/folder/you/want/to/monitor
+```
 
-Working: 
+## WIP! Check commit logs 
 
-- sub s rendering 
-- background file monitoring 
-- webserver 
+## Working: 
+
+- rendering ms after file change
+- support multiple files in same folder
+- background file change monitoring 
+- rendering using the gin web server library and web sockets
 - mermaid diagrams 
 - code highlight
+- github theme
 
-Not working rn: 
+## Not working right now: 
 
 - recursive folder monitoring
-- scroll to last edit position
-
-```bash
-go run . [~/your/folder/to/monitor]
-```
+- scroll to last edited position
+  - I don't know how to solve this, since I have no way to get the current cursor position
