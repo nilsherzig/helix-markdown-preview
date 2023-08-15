@@ -7,11 +7,11 @@ marked.use({
 
 
 marked.use(markedHighlight({
-    langPrefix: 'hljs language-',
-    highlight(code, lang) {
-        const language = hljs.getLanguage(lang) ? lang : 'plaintext';
-        return hljs.highlight(code, { language }).value;
-    }
+  langPrefix: 'hljs language-',
+  highlight(code, lang) {
+    const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+    return hljs.highlight(code, { language }).value;
+  }
 }));
 const renderer = new marked.Renderer();
 renderer.code = function(code, language) {
@@ -34,6 +34,12 @@ webSocket.onmessage = (event) => {
   let elem = document.getElementById("content")
   // var currentContent = elem.innerHTML
 
-  elem.innerHTML = marked.parse(event.data);
+  let result = event.data
+  const regex = /---([\s\S]*?)---/;
+  if (result.startsWith("---")) {
+    result = result.replace(regex, '');
+  }
+
+  elem.innerHTML = marked.parse(result);
   mermaid.run();
 }
