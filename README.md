@@ -1,8 +1,10 @@
+## WIP! Check commit logs 
+
+## Usage
+
 ```bash
 go run . ~/the/folder/you/want/to/monitor
 ```
-
-## WIP! Check commit logs 
 
 ## Working: 
 
@@ -12,11 +14,13 @@ go run . ~/the/folder/you/want/to/monitor
 - rendering using the gin web server library and web sockets
 - mermaid diagrams 
 - code highlight
-- GitHub theme
+- GitHub markdown support 
+- GitHub markdown theme
 
-## Not working right now: 
+## Things I would like to change / implement
 
+- Automatically start when helix opens a markdown file
 - recursive folder monitoring
   - [ ] implement my own and add a file watcher for every `*.md` file
 - scroll to last edited position
-  - I don't know how to solve this, since I have no way to get the current cursor position
+- I don't know how to implement this since I don't know the current cursor position in helix. Also, since more than one place in the document can be changed since the last save, I can't just scroll to the difference between the two versions  - 
