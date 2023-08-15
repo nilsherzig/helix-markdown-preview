@@ -30,7 +30,10 @@ let websocketURL = "ws://" + loc.host + "/ws"
 webSocket = new WebSocket(websocketURL);
 webSocket.onmessage = (event) => {
   console.log(event.data);
-  document.getElementById('content').innerHTML =
-    marked.parse(event.data);
+
+  let elem = document.getElementById("content")
+  // var currentContent = elem.innerHTML
+
+  elem.innerHTML = marked.parse(event.data);
   mermaid.run();
 }
