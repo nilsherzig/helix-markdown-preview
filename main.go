@@ -1,20 +1,30 @@
 package main
 
 import (
+	"io/fs"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
 	"time"
 
+	"embed"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"html/template"
 )
 
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 }
+
+//go:embed static
+var embStaticFS embed.FS
+
+//go:embed templates
+var emdTemplateFS embed.FS
 
 func main() {
 
@@ -34,8 +44,16 @@ func main() {
 	go watchFolder(folderPath, channel)
 
 	router := gin.Default()
-	router.LoadHTMLGlob("templates/*")
-	router.Static("/static", "./static")
+	// router.LoadHTMLGlob()
+	// router.LoadHTMLFiles("./templates/index.html")
+
+	templ := template.Must(template.New("").ParseFS(emdTemplateFS, "templates/*.html"))
+	router.SetHTMLTemplate(templ)
+
+	// router.Static("/static", "./static")
+	sub, _ := fs.Sub(embStaticFS, "static") // needs eror checks TODO
+
+	router.StaticFS("/static", http.FS(sub)) // embed
 
 	//router.LoadHTMLFiles("templates/template1.html", "templates/template2.html")
 	router.GET("/", func(c *gin.Context) {
@@ -65,7 +83,7 @@ func main() {
 				conn.WriteMessage(websocket.TextMessage, []byte(currentMessage))
 			}
 			oldMessage = currentMessage
-			time.Sleep(time.Millisecond * 300)
+			time.Sleep(time.Millisecond * 300) // there has to be another way TODO
 		}
 	})
 

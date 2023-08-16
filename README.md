@@ -21,6 +21,7 @@ go build .
 - code highlight
 - GitHub markdown support 
 - GitHub markdown theme
+- all files a embedded into the binary
 
 ## Things I would like to change / implement
 
