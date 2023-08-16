@@ -1,19 +1,42 @@
 package main
 
 import (
+	"fmt"
 	"io/fs"
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"runtime"
 	"time"
 
 	"embed"
 
+	"html/template"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
-	"html/template"
 )
+
+func openbrowser(url string) {
+	var err error
+
+	switch runtime.GOOS {
+	case "linux":
+		err = exec.Command("xdg-open", url).Start()
+	case "windows":
+		err = exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Start()
+	case "darwin":
+		err = exec.Command("open", url).Start()
+	default:
+		err = fmt.Errorf("unsupported platform")
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
+
+}
 
 func handleErr(err error) {
 	if err != nil {
@@ -91,6 +114,7 @@ func main() {
 	})
 
 	log.Printf("http://127.0.0.1%s\n", webserverPort)
+	openbrowser(fmt.Sprintf("http://127.0.0.1%s", webserverPort))
 	router.Run(webserverPort)
 
 }
