@@ -29,4 +29,4 @@ go build .
 - recursive folder monitoring
   - implement my own and add a file watcher for every `*.md` file
 - scroll to last edited position
-  - I don't know how to implement this since I don't know the current cursor position in helix. Also, since more than one place in the document can be changed since the last save, I can't just scroll to the difference between the two versions  - 
+  - I don't know how to implement this since I don't know the current cursor position in helix. Also, since more than one place in the document can be changed since the last save, I can't just scroll to the difference between the two versions
