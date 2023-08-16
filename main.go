@@ -15,6 +15,12 @@ import (
 	"html/template"
 )
 
+func handleErr(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
@@ -44,18 +50,15 @@ func main() {
 	go watchFolder(folderPath, channel)
 
 	router := gin.Default()
-	// router.LoadHTMLGlob()
-	// router.LoadHTMLFiles("./templates/index.html")
 
 	templ := template.Must(template.New("").ParseFS(emdTemplateFS, "templates/*.html"))
 	router.SetHTMLTemplate(templ)
 
-	// router.Static("/static", "./static")
-	sub, _ := fs.Sub(embStaticFS, "static") // needs eror checks TODO
+	sub, err := fs.Sub(embStaticFS, "static")
+	handleErr(err)
 
 	router.StaticFS("/static", http.FS(sub)) // embed
 
-	//router.LoadHTMLFiles("templates/template1.html", "templates/template2.html")
 	router.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", gin.H{
 			"folder": folderPath,
