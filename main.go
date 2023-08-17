@@ -106,7 +106,8 @@ func main() {
 		for {
 			currentMessage := message
 			if currentMessage != oldMessage {
-				conn.WriteMessage(websocket.TextMessage, []byte(currentMessage))
+				err := conn.WriteMessage(websocket.TextMessage, []byte(currentMessage))
+				handleErr(err)
 			}
 			oldMessage = currentMessage
 			time.Sleep(time.Millisecond * 300) // there has to be another way TODO
@@ -115,10 +116,7 @@ func main() {
 
 	log.Printf("http://127.0.0.1%s\n", webserverPort)
 	openbrowser(fmt.Sprintf("http://127.0.0.1%s", webserverPort))
-	router.Run(webserverPort)
+	err = router.Run(webserverPort)
+	handleErr(err)
 
-}
-
-func exit(i int) {
-	panic("unimplemented")
 }
