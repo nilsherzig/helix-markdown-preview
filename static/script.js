@@ -21,6 +21,12 @@ renderer.code = function(code, language) {
     return '<pre><code>' + code + '</code></pre>';
   }
 };
+// Custom Kanban Renderer Code
+renderer.code = function(code, language) {
+  if (language == "kanban") {
+    return '<pre class="kanban">' + code + '</pre>';
+  }
+};
 
 marked.use({ renderer })
 
