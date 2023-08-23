@@ -57,45 +57,63 @@ var emdTemplateFS embed.FS
 
 func main() {
 
+	// golang error handling meme
+	var err error
+
+	// choose root folder to monitor - use current folder if no args are provided
+	var folderPath string
+
 	if len(os.Args) != 2 {
-		log.Fatal("Please provide a path")
+		folderPath, err = os.Getwd()
+		handleErr(err)
+		log.Printf("No path specified, using %s\n", folderPath)
+	} else {
+		folderPath = os.Args[1]
+		folderPath = filepath.Clean(folderPath)
+		log.Println("working in:", folderPath)
 	}
 
-	folderPath := os.Args[1]
-
-	folderPath = filepath.Clean(folderPath)
-
-	log.Println("working in:", folderPath)
-
-	webserverPort := ":8080"
-
+	// channel logic, used by filewatcher goroutine to exchange updates with webserver
 	channel := make(chan string)
-	go watchFolder(folderPath, channel)
-
-	router := gin.Default()
-
-	templ := template.Must(template.New("").ParseFS(emdTemplateFS, "templates/*.html"))
-	router.SetHTMLTemplate(templ)
-
-	sub, err := fs.Sub(embStaticFS, "static")
-	handleErr(err)
-
-	router.StaticFS("/static", http.FS(sub)) // embed
-
-	router.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.html", gin.H{
-			"folder": folderPath,
-		})
-	})
 
 	message := "noch keine änderungen"
-
 	go func(channel chan string) {
 		for {
 			message = <-channel
 		}
 	}(channel)
 
+	// webserver setup
+	// debug build reads files on every site refresh from filesystem
+	// prod build embeds files into binary
+	// different logging
+	// compile using `DEBUG=true`
+	var router *gin.Engine
+
+	debug := os.Getenv("DEBUG")
+	if len(debug) > 0 {
+		router = gin.Default()
+		router.LoadHTMLGlob("templates/*")
+		router.Static("/static", "./static")
+	} else {
+		gin.SetMode(gin.ReleaseMode)
+		router = gin.New()
+		templ := template.Must(template.New("").ParseFS(emdTemplateFS, "templates/*.html"))
+		router.SetHTMLTemplate(templ)
+
+		sub, err := fs.Sub(embStaticFS, "static")
+		handleErr(err)
+		router.StaticFS("/static", http.FS(sub)) // embed
+	}
+
+	// index endpoint
+	router.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", gin.H{
+			"folder": folderPath,
+		})
+	})
+
+	// websocket endpoint
 	router.GET("/ws", func(c *gin.Context) {
 		conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 		if err != nil {
@@ -114,9 +132,14 @@ func main() {
 		}
 	})
 
+	// start file watcher in goroutine
+	go watchFolder(folderPath, channel)
+
+	// start gin webserver
+	webserverPort := ":8080"
 	log.Printf("http://127.0.0.1%s\n", webserverPort)
-	openbrowser(fmt.Sprintf("http://127.0.0.1%s", webserverPort))
 	err = router.Run(webserverPort)
 	handleErr(err)
 
+	openbrowser(fmt.Sprintf("http://127.0.0.1%s", webserverPort))
 }
