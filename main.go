@@ -137,9 +137,8 @@ func main() {
 
 	// start gin webserver
 	webserverPort := ":8080"
-	log.Printf("http://127.0.0.1%s\n", webserverPort)
+	log.Printf("website running at http://127.0.0.1%s\n", webserverPort)
+	openbrowser(fmt.Sprintf("http://127.0.0.1%s", webserverPort))
 	err = router.Run(webserverPort)
 	handleErr(err)
-
-	openbrowser(fmt.Sprintf("http://127.0.0.1%s", webserverPort))
 }
