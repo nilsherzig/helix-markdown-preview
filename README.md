@@ -26,7 +26,7 @@ go build .
 ## Things I would like to change / implement
 
 - Custom kanban renderer / parser
-  - run parser as marked extension in client side js 
+  - run parser as marked extension in client side JS 
   - using a code block (?)
   - Somehow add kanban auto formatting to helix (pipe to external script?)
 - Automatically start when helix opens a markdown file
