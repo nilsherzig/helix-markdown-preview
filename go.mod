@@ -1,4 +1,4 @@
-module nilsherzig.com/helix-markdown-preview
+module nilsherzig.com/live-markdown-preview
 
 go 1.20
 
