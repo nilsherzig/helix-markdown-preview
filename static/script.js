@@ -1,21 +1,27 @@
-let darkmode = true
+let darkmode = ((localStorage.getItem("darkmode") == "true") ? true : false)
 
-let darktheme = document.querySelector(".darktheme")
-let lighttheme = document.querySelector(".lighttheme")
+let darktheme = document.querySelector(".darktheme");
+let lighttheme = document.querySelector(".lighttheme");
 
-function toggleTheme() {
-  darkmode = !darkmode
+changeTheme()
+
+function changeTheme() {
   if (darkmode) {
-    lighttheme.rel = "alternate"
-    darktheme.rel = "stylesheet"
-    document.body.style.backgroundColor = "#0d1117"
+    lighttheme.rel = "alternate";
+    darktheme.rel = "stylesheet";
+    document.body.style.backgroundColor = "#0d1117";
   } else {
-    lighttheme.rel = "stylesheet"
-    darktheme.rel = "alternate"
-    document.body.style.backgroundColor = "#ffffff"
+    lighttheme.rel = "stylesheet";
+    darktheme.rel = "alternate";
+    document.body.style.backgroundColor = "#ffffff";
   }
 }
 
+function toggleTheme() {
+  darkmode = !darkmode;
+  localStorage.setItem("darkmode", darkmode);
+  changeTheme()
+}
 
 const { markedHighlight } = globalThis.markedHighlight;
 marked.use({
