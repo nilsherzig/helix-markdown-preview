@@ -24,7 +24,7 @@ renderer.code = function(code, language) {
 // Custom Kanban Renderer Code
 renderer.code = function(code, language) {
   if (language == "kanban") {
-    return '<pre class="kanban">' + code + '</pre>';
+    return '<div class="kanban">' + code + '</div>';
   }
 };
 
@@ -49,3 +49,7 @@ webSocket.onmessage = (event) => {
   elem.innerHTML = marked.parse(result);
   mermaid.run();
 }
+
+webSocket.onclose = () => {
+  window.close();
+};
