@@ -4,11 +4,13 @@
   integrity="sha512-0aPQyyeZrWj9sCA46UlmWgKOP0mUipLQ6OZXu8l4IcAmD2u31EPEy9VcIMvl7SoAaKe8bLXZhYoMaE/in+gcgA=="
   crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-<link rel="stylesheet" href="/static/github-markdown-light.css" />
+<link rel="stylesheet" href="/static/github-markdown-dark.css" class="darktheme" />
+<link rel="alternate stylesheet" href="/static/github-markdown-light.css" class="lighttheme" />
 
 <style>
-  html {
-    background-color: #ffffff;
+  body {
+    background-color: #0d1117;
+    padding: 0px;
   }
 
   .markdown-body {
@@ -29,6 +31,9 @@
     color: blue;
   }
 </style>
+<div class="settingsBar">
+  <button onclick="toggleTheme()">Theme</button>
+</div>
 
 <div id="content" class="markdown-body">
   <p>please change / write to a file in "{{ .folder }}"</p>

@@ -1,3 +1,22 @@
+let darkmode = true
+
+let darktheme = document.querySelector(".darktheme")
+let lighttheme = document.querySelector(".lighttheme")
+
+function toggleTheme() {
+  darkmode = !darkmode
+  if (darkmode) {
+    lighttheme.rel = "alternate"
+    darktheme.rel = "stylesheet"
+    document.body.style.backgroundColor = "#0d1117"
+  } else {
+    lighttheme.rel = "stylesheet"
+    darktheme.rel = "alternate"
+    document.body.style.backgroundColor = "#ffffff"
+  }
+}
+
+
 const { markedHighlight } = globalThis.markedHighlight;
 marked.use({
   gfm: true,
@@ -35,7 +54,6 @@ var loc = window.location, new_uri;
 let websocketURL = "ws://" + loc.host + "/ws"
 webSocket = new WebSocket(websocketURL);
 webSocket.onmessage = (event) => {
-  console.log(event.data);
 
   let elem = document.getElementById("content")
   // var currentContent = elem.innerHTML
