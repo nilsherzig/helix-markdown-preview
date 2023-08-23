@@ -29,9 +29,8 @@ go build .
   - run parser as marked extension in client side js 
   - using a code block (?)
   - Somehow add kanban auto formatting to helix (pipe to external script?)
-- Option to not include files into binary during development for js / html / css reloads without go recompile / server restart
 - Automatically start when helix opens a markdown file
 - recursive folder monitoring
   - implement my own and add a file watcher for every `*.md` file
-- scroll to last edited position
-  - I don't know how to implement this since I don't know the current cursor position in helix. Also, since more than one place in the document can be changed since the last save, I can't just scroll to the difference between the two versions
+- scroll to current position
+  - I don't know how to get the current line number from helix, maybe scroll to last edit? 
