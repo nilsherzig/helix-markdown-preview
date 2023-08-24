@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/fs"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"os/exec"
@@ -135,10 +136,19 @@ func main() {
 	// start file watcher in goroutine
 	go watchFolder(folderPath, channel)
 
+	// find open port, starting from 8080
+	webserverPort := 8080
+	for {
+		_, err := net.DialTimeout("tcp", fmt.Sprintf(":%d", webserverPort), time.Second)
+		if err != nil {
+			break
+		}
+		webserverPort += 1
+	}
+
 	// start gin webserver
-	webserverPort := ":8080"
-	log.Printf("website running at http://127.0.0.1%s\n", webserverPort)
-	openbrowser(fmt.Sprintf("http://127.0.0.1%s", webserverPort))
-	err = router.Run(webserverPort)
+	log.Printf("website running at http://127.0.0.1:%d\n", webserverPort)
+	openbrowser(fmt.Sprintf("http://127.0.0.1:%d", webserverPort))
+	err = router.Run(fmt.Sprintf(":%d", webserverPort))
 	handleErr(err)
 }
