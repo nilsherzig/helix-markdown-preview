@@ -43,8 +43,7 @@ func watchFolder(folderPath string, channel chan string) {
 		}
 	}()
 
-	// get all paths (recursion)
-
+	// get all markdown files from root folder (recursion)
 	err = filepath.Walk(folderPath,
 		func(path string, info os.FileInfo, err error) error {
 			if err != nil {
