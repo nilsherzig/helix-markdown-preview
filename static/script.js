@@ -38,6 +38,7 @@ marked.use(markedHighlight({
     return hljs.highlight(code, { language }).value;
   }
 }));
+
 const renderer = new marked.Renderer();
 renderer.code = function(code, language) {
   if (language == "mermaid") {
@@ -46,12 +47,13 @@ renderer.code = function(code, language) {
     return '<pre><code>' + code + '</code></pre>';
   }
 };
+
 // Custom Kanban Renderer Code
-renderer.code = function(code, language) {
-  if (language == "kanban") {
-    return '<div class="kanban">' + code + '</div>';
-  }
-};
+// renderer.code = function(code, language) {
+//   if (language == "kanban") {
+//     return '<div class="kanban">' + code + '</div>';
+//   }
+// };
 
 marked.use({ renderer })
 
@@ -69,6 +71,7 @@ webSocket.onmessage = (event) => {
   if (result.startsWith("---")) {
     result = result.replace(regex, '');
   }
+
 
   elem.innerHTML = marked.parse(result);
   mermaid.run();

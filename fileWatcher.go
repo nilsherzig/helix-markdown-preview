@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -42,11 +43,26 @@ func watchFolder(folderPath string, channel chan string) {
 		}
 	}()
 
-	// Add a path.
-	err = watcher.Add(folderPath)
-	if err != nil {
-		log.Fatal(err)
-	}
+	// get all paths (recursion)
+
+	err = filepath.Walk(folderPath,
+		func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return err
+			}
+			if filepath.Ext(path) == ".md" {
+				fmt.Println(path, info.Size())
+				// Add a path.
+				err = watcher.Add(path)
+				if err != nil {
+					log.Fatal(err)
+				}
+			}
+			return nil
+		})
+
+	handleErr(err)
+
 	// Block main goroutine forever.
 	<-make(chan struct{})
 
